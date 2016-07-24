@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="70617e5b-b040-4bcf-8dec-7f788e9daa19" name="ALI" url="http://120.27.48.4">
+        <fileTransfer host="120.27.48.4" port="22" privateKey="$USER_HOME$/.ssh/id_rsa" rootFolder="/webapps/hello_django" accessType="SFTP" username="user_hello_django" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

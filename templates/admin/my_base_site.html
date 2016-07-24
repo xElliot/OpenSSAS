@@ -1,0 +1,31 @@
+{% extends "admin/my_base.html" %}
+{#{% load staticfiles %}#}
+{#<link rel="stylesheet" type="text/css" href="{% static 'injection_test/css/style.css' %}"/>#}
+
+{% block title %}TEST{% endblock %}
+
+{% block branding %}
+    <h1 id="site-name"><a href="{% url 'admin:index' %}"><strong>WEB Injection Test</strong></a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+{% block footer %}
+    <div id="footer">
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+            <div class="sidebar-module sidebar-module-icon">
+                <h4>Signature</h4>
+                <p style="color: #79aec8;"><strong>Think</strong> About It.<strong>Think</strong> About
+                    It.<strong>Think</strong>
+                    About It.</p>
+            </div>
+            <div class="sidebar-module">
+                <h4>Elsewhere</h4>
+                <ol class="list-unstyled">
+                    <li><a href="#">博客园</a></li>
+                    <li><a href="#">开源中国</a></li>
+                    <li><a href="http://blog.sina.com.cn/elliotx">新浪博客</a></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+{% endblock %}
