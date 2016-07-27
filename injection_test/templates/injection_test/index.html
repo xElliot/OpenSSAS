@@ -15,26 +15,26 @@
                 <div class="app-{{ task.name }} module">
                     <table>
                         <caption>
-                            <a href="{{ task.name }}" class="section"
-                               title="{% blocktrans with name=task.name %}Targets in the {{ name }} Task{% endblocktrans %}">{{ task.name }}</a>
+                            <a href="/injection_test/{{ task.id }}/" class="section"
+                               title="{% blocktrans with name=task.name %}Policies in the {{ name }} Task{% endblocktrans %}">{{ task.name }}</a>
                         </caption>
-                        {% if task.targets %}
-                            {% for target in task.targets.all %}
-                                <tr class="model-{{ target.name|lower }}">
-                                    {% if target.admin_url %}
-                                        <th scope="row"><a href="{{ target.admin_url }}">{{ model.name }}</a></th>
+                        {% if task.policies %}
+                            {% for policy in task.policies.all %}
+                                <tr class="model-{{ policy.name|lower }}">
+                                    {% if policy.admin_url %}
+                                        <th scope="row"><a href="{{ policy.admin_url }}">{{ model.name }}</a></th>
                                     {% else %}
-                                        <th scope="row">{{ target.name }}</th>
+                                        <th scope="row">{{ policy.name }}</th>
                                     {% endif %}
 
                                     {% if target.add_url %}
-                                        <td><a href="{{ target.add_url }}" class="addlink">{% trans 'Add' %}</a></td>
+                                        <td><a href="{{ policy.add_url }}" class="addlink">{% trans 'Add' %}</a></td>
                                     {% else %}
                                         <td>&nbsp;</td>
                                     {% endif %}
 
                                     {% if target.admin_url %}
-                                        <td><a href="{{ target.admin_url }}" class="changelink">{% trans 'Change' %}</a>
+                                        <td><a href="{{ policy.admin_url }}" class="changelink">{% trans 'Change' %}</a>
                                         </td>
                                     {% else %}
                                         <td>&nbsp;</td>
@@ -47,8 +47,6 @@
                     </table>
                 </div>
             {% endfor %}
-        {% else %}
-            <p>{% trans "You don't have permission to edit anything." %}</p>
         {% endif %}
     </div>
 {% endblock %}
@@ -57,29 +55,20 @@
     <div id="content-related">
         <div class="module" id="recent-actions-module">
             <h2>{% trans 'Quick start in here.' %}</h2>
-            <h3>{% trans 'My Actions' %}</h3>
-            {% load log %}
-            {% get_admin_log 10 as admin_log for_user user %}
+            <h3>{% trans 'Target Url' %}</h3>
+
             {% if not admin_log %}
                 <p>{% trans 'None available' %}</p>
             {% else %}
                 <ul class="actionlist">
-                    {% for entry in admin_log %}
-                        <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
-                            {% if entry.is_deletion or not entry.get_admin_url %}
-                                {{ entry.object_repr }}
-                            {% else %}
-                                <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
-                            {% endif %}
-                            <br/>
-                            {% if entry.content_type %}
-                                <span class="mini quiet">{% filter capfirst %}
-                                    {{ entry.content_type }}{% endfilter %}</span>
-                            {% else %}
-                                <span class="mini quiet">{% trans 'Unknown content' %}</span>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
+                    <form name="input" action="{% url 'quick_scan' %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" name="page_name"/>
+                            <input type="submit" value="Submit"/>
+                        </div>
+                    </form>
+                    <h4>{% trans 'Scan injection points in the page. Input URL, for example "http://www.jb51.net/article/57527.htm"' %}</h4>
                 </ul>
             {% endif %}
         </div>

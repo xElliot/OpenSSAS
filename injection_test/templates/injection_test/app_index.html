@@ -1,0 +1,59 @@
+{% extends "injection_test/index.html" %}
+{% load i18n %}
+
+{% block bodyclass %}{{ block.super }} app-{{ app_label }}{% endblock %}
+
+{% if not is_popup %}
+    {% block breadcrumbs %}
+        <div class="breadcrumbs">
+            <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+            &rsaquo;
+            {% for app in app_list %}
+                {{ app }}
+            {% endfor %}
+        </div>
+    {% endblock %}
+{% endif %}
+{% block content %}
+    <div id="content-main">
+        {% if task %}
+            {% for i_object in task.i_objects.all %}
+                <div class="app-{{ i_object.i_url }} module">
+                    <table>
+                        <caption>
+                            <a href="{{ i_object.id }}/" class="section"
+                               title="{% blocktrans with name=i_object.i_url %}Parameter in the {{ name }} injection_object{% endblocktrans %}">{{ i_object.i_url }}</a>
+                        </caption>
+                        {% if i_object.i_parameters %}
+                            {% for i_parameter in i_object.i_parameters.all %}
+                                <tr class="model-{{ i_parameter.name | lower }}">
+                                    {% if i_parameter.admin_url %}
+                                        <th scope="row"><a href="{{ i_parameter.admin_url }}">{{ model.name }}</a></th>
+                                    {% else %}
+                                        <th scope="row">{{ i_parameter.name }}</th>
+                                    {% endif %}
+
+                                    {% if i_parameter.add_url %}
+                                        <td><a href="{{ i_parameter.add_url }}" class="addlink">{% trans 'Add' %}</a></td>
+                                    {% else %}
+                                        <td>&nbsp;</td>
+                                    {% endif %}
+
+                                    {% if i_parameter.admin_url %}
+                                        <td><a href="{{ i_parameter.admin_url }}" class="changelink">{% trans 'Change' %}</a>
+                                        </td>
+                                    {% else %}
+                                        <td>&nbsp;</td>
+                                    {% endif %}
+
+
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </table>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
+{% block sidebar %}{% endblock %}

@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'gunicorn',
-
+    'djcelery',
     'injection_test.apps.InjectionTestConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -125,3 +125,14 @@ USE_TZ = False
 STATIC_URL = '/static/'
 
 STATIC_ROOT = '/webapps/hello_django/static/'
+
+
+# celery 异步任务代码
+
+import djcelery
+
+djcelery.setup_loader()
+
+BROKER_URL = 'amqp://guest@localhost//'
+
+CELERY_RESULT_BACKEND = 'amqp://guest@localhost//'

@@ -54,7 +54,7 @@
                     </div>
                 {% else %}
                     <div id="user-tools">
-                        <form class="form-row" method="post" action={% url 'login_to_index' %}>
+                        <form class="form-row" method="post" action="{% url 'login_to_index' %}">
                             {% csrf_token %}
                             <div class="form-group">
                                 {% if password_is_wrong %}

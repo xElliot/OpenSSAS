@@ -1,35 +1,65 @@
-import warnings
-
+from django.contrib.auth import (
+    REDIRECT_FIELD_NAME, logout as auth_logout, update_session_auth_hash,
+)
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import deprecate_current_app
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_text
+from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import render, HttpResponse, render_to_response, resolve_url
 from django.utils.http import is_safe_url
 from django.utils.translation import ugettext as _
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash, get_user_model, \
-    REDIRECT_FIELD_NAME
-from django.contrib.auth.views import login as LOGIN
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm, SetPasswordForm
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import deprecate_current_app
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, HttpResponse, render_to_response, resolve_url
-from django.contrib.auth import (
-    REDIRECT_FIELD_NAME, get_user_model, login as auth_login,
-    logout as auth_logout, update_session_auth_hash,
-)
 
 # Create your views here.
 from django.template import RequestContext
 from django.template.response import TemplateResponse
-from django.utils.deprecation import RemovedInDjango110Warning
 from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_protect
-from django.views.decorators.debug import sensitive_post_parameters
 
-from OpenSSAS import settings
 from injection_test.forms import LoginForm
 from .models import *
+from .tasks import *
+
+
+@login_required
+def injection_object(request,
+                     template_name='injection_test/app_index.html',
+                     task_id=1):
+    try:
+        task = Task.objects.get(pk=task_id)
+    except Task.DoesNotExist:
+        raise Http404('Task does not exist')
+    context = {
+        'admin_log': True,
+        'task': task,
+        'has_permission': True,
+        'is_login': True,
+        'title': _('Injection urls and parameters'),
+        'app_list': ['injection_object'],
+    }
+    return render(request, template_name, context)
+
+# @deprecate_current_app
+@login_required
+def quick_scan(request,
+               template_name='injection_test/index.html'):
+    page_name = request.POST.get('page_name', '')
+    name = get_scan_name(page_name)
+    policy, created = Policy.objects.get_or_create(name='Quick Scan')
+    task = Task.objects.create(name=name, page=page_name)
+    task.policies.add(policy)
+    task_list = Task.objects.all()
+    i_scan(task)
+    # i_scan.delay(task)
+    context = {
+        'has_permission': True,
+        'is_login': True,
+        'task_list': task_list,
+        'title': _('Welcome'),
+        'admin_log': True,
+    }
+
+    return render(request, template_name, context)
 
 
 def index(request):
@@ -40,8 +70,9 @@ def login1(request,
            template_name='injection_test/index.html'):
     if request.method == 'GET':
         form = LoginForm()
-        return render_to_response('injection_test/login2.html',
+        return render_to_response(template_name,
                                   RequestContext(request, {'form': form}))
+
 
 # @sensitive_post_parameters
 @never_cache
@@ -61,6 +92,7 @@ def login_to_index(request,
                     'is_login': True,
                     'task_list': task_list,
                     'title': _('Welcome'),
+                    'admin_log': True,
                 }
                 return render(request, template_name, context)
             else:
@@ -72,9 +104,9 @@ def login_to_index(request,
 
 @deprecate_current_app
 def logout_from_index(request, next_page=None,
-           template_name='injection_test/logged_out.html',
-           redirect_field_name=REDIRECT_FIELD_NAME,
-           extra_context=None):
+                      template_name='injection_test/logged_out.html',
+                      redirect_field_name=REDIRECT_FIELD_NAME,
+                      extra_context=None):
     """
     Logs out the user and displays 'You are logged out' message.
     """
@@ -84,7 +116,7 @@ def logout_from_index(request, next_page=None,
         next_page = resolve_url(next_page)
 
     if (redirect_field_name in request.POST or
-            redirect_field_name in request.GET):
+                redirect_field_name in request.GET):
         next_page = request.POST.get(redirect_field_name,
                                      request.GET.get(redirect_field_name))
         # Security check -- don't allow redirection to a different host.
@@ -106,7 +138,6 @@ def logout_from_index(request, next_page=None,
         context.update(extra_context)
 
     return TemplateResponse(request, template_name, context)
-
 
 
 @login_required
