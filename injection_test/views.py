@@ -67,7 +67,7 @@ def index(request):
 
 
 def login1(request,
-           template_name='injection_test/index.html'):
+           template_name='injection_test/login2.html'):
     if request.method == 'GET':
         form = LoginForm()
         return render_to_response(template_name,

@@ -31,23 +31,7 @@
             </div>
         </fieldset>
     </form>
-    {# Display a form #}
-    {% comment %}<form action="/injection_test/login3/" method="post" class="form">{% csrf_token %}
-        {% if password_is_wrong %}
-            <div class="alert alert-error">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <h4>错误!</h4>用户名或密码错误
-            </div>
-        {% endif %}
-        {% bootstrap_form form layout='' size='large' %}
-        <p class="float-right">
-            {% buttons %}
-                <button type="submit" class="btn btn-primary">
-                    {% bootstrap_icon "road" %} Login
-                </button>
-            {% endbuttons %}
-        </p>
-    </form>{% endcomment %}
+
 {% endblock %}
 {#{% block footer %}<div id="footer"></div>{% endblock %}#}
 
