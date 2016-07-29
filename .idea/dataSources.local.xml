@@ -7,7 +7,6 @@
     </data-source>
     <data-source name="Django default" uuid="e591dd5f-0259-4907-b6d2-54a59b3fd0c4">
       <auth-required>false</auth-required>
-      <first-sync>true</first-sync>
     </data-source>
   </component>
 </project>

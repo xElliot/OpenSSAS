@@ -100,7 +100,19 @@ def login_to_index(request,
                                           RequestContext(request, {'form': form, 'password_is_wrong': True}))
         else:
             return render_to_response('injection_test/login2.html', RequestContext(request, {'form': form,}))
-
+    elif request.method == 'GET':
+        if request.user:
+            task_list = Task.objects.all()
+            context = {
+                'has_permission': True,
+                'is_login': True,
+                'task_list': task_list,
+                'title': _('Welcome'),
+                'admin_log': True,
+            }
+            return render(request, template_name, context)
+    else:
+        raise Http404('error')
 
 @deprecate_current_app
 def logout_from_index(request, next_page=None,
