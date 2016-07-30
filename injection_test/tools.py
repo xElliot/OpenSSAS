@@ -27,5 +27,5 @@ def get_i_url(str, page_name):
     elif str.startswith('http'):
         result = str
     else:
-        result = 'wrong injection_url'
+        result = 'wrong-injection_url'
     return result
