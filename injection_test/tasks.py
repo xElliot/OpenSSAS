@@ -65,7 +65,7 @@ def i_scan(task):
                 h_form_action_option_list = h_form.find('option')
                 if h_form_action_option_list:
                     for h_form_action_option in h_form_action_option_list.items():
-                        i_url = get_i_url(h_form_action_option, page_name)
+                        i_url = get_i_url(h_form_action_option.attr('value'), page_name)
                         i_o = IObject.objects.get_or_create(task=task, i_url=i_url)
                         if h_form_action_input_list:
                             for h_form_action_input in h_form_action_input_list.items():
