@@ -31,7 +31,7 @@ def i_scan(task):
                 i_object.i_url = get_i_url(a_href, page_name)
                 i_object.save()
                 i_parameter_list = a_href.split('?')
-                if i_parameter_list[-1]:
+                if len(i_parameter_list) > 1:
                     i_parameter_list_object_list = i_parameter_list[-1].split('&')
                     for i_parameter_list_object in i_parameter_list_object_list:
                         i_parameter = IParameter.objects.create(i_object=i_object)

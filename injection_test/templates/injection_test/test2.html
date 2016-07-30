@@ -1,0 +1,44 @@
+<html>
+<head><title>简单的页面进度条效果</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+    <meta http-equiv="Refresh" content="20">
+    <style> td {
+        font-size: 10.5pt;
+        color: #147e19;
+        font-family: Courier New;
+    } </style>
+</head>
+<body bgcolor="#FFFFFF"><br><br><br><br>
+<center>
+    <table width=500 border=0>
+        <tr>
+            <td><br>
+                <table align=left>
+                    <tr>
+                        <td width=1 bgcolor=#99ccff height=5 id=Ratio></td>
+                    </tr>
+                </table> <!--将上面一行的align=left换成right或center，看看效果如何--> </td>
+        </tr>
+        <tr>
+            <td bgcolor=eeeeee> 20秒后返回首页</td>
+        </tr>
+    </table>
+</center>
+<p align="center">
+    <script language="javascript">
+
+        ShowRatio();
+        function ShowRatio() {
+            var intTimer = 40; //进度条增长速度 var intAddwidth=1; //每次增长的长度，最小为1 var intMaxWidth=500; //最大宽度 //以上两个数值需要根据你的进度条总宽和延迟时间决定，例如：　本页的进度条长度为500，需要在20秒后刷新或离开本页，则 // by http://tbwsy.sinaapp.com///intAddwidth=(20*1000)/500=40.当然，可以让intAddwidth=80,intTimer=2，请试一试。
+            var rw;
+            if (Ratio.width == "") Ratio.width = 1;
+            rw = parseInt(Ratio.width);
+            Ratio.width = rw + intAddwidth;
+            if (rw + 10 < intMaxWidth) setTimeout("ShowRatio()", intTimer);
+        } </script>
+
+    <font style="font-size: 9pt" color="#808080">转自：网页特效园地[<a target="_blank"
+                                                              href=http://tbwsy.sinaapp.com/></a>]</font></p>
+</body>
+</html>
+
