@@ -27,8 +27,8 @@
                                         <th scope="row">{{ policy.name }}</th>
                                     {% endif %}
 
-                                    {% if target.add_url %}
-                                        <td><a href="{{ policy.add_url }}" class="addlink">{% trans 'Add' %}</a></td>
+                                    {% if policy.add_url %}
+                                        <td><a href="{{ task.id }}" class="changelink">{% trans 'Delete' %}</a></td>
                                     {% else %}
                                         <td>&nbsp;</td>
                                     {% endif %}
@@ -65,6 +65,7 @@
                         {% csrf_token %}
                         <div class="form-group">
                             <input type="text" name="page_name"/>
+                            <input type="text" name="coo"/>
                             <input type="submit" value="Submit"/>
                         </div>
                     </form>

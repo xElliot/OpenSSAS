@@ -33,11 +33,6 @@
                                         <th scope="row">{{ i_parameter.name }}</th>
                                     {% endif %}
 
-                                    {% if i_parameter.add_url %}
-                                        <td><a href="{{ i_parameter.add_url }}" class="addlink">{% trans 'Add' %}</a></td>
-                                    {% else %}
-                                        <td>&nbsp;</td>
-                                    {% endif %}
 
                                     {% if i_parameter.admin_url %}
                                         <td><a href="{{ i_parameter.admin_url }}" class="changelink">{% trans 'Change' %}</a>
@@ -49,11 +44,38 @@
 
                                 </tr>
                             {% endfor %}
+                            {% if i_object.add_url %}
+                                <td><a href="{% url 'delete_i_object' i_object.id %}" class="changelink" style="float: right; display: none" >{% trans 'Delete' %}</a></td>
+                            {% else %}
+                                <td>&nbsp;</td>
+                            {% endif %}
+
                         {% endif %}
                     </table>
                 </div>
+
             {% endfor %}
         {% endif %}
     </div>
 {% endblock %}
-{% block sidebar %}{% endblock %}
+{% block sidebar %}
+    <div id="content-related">
+        <div class="module" id="recent-actions-module">
+            <h2>{% trans 'Run Check' %}</h2>
+            <h3>{% trans '输出注入报告' %}</h3>
+
+            {% if not admin_log %}
+                <p>{% trans 'None available' %}</p>
+            {% else %}
+                <ul class="actionlist">
+                    <form name="input" action="report/" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="submit" value="Output"/>
+                        </div>
+                    </form>
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
